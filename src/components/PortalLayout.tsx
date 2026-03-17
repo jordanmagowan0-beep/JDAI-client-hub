@@ -1,8 +1,10 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { FullScreenLoader } from '@/components/PortalFeedback';
 import dmitLogo from '@/assets/dmit-logo.png';
-import { LayoutDashboard, FolderKanban, Bell, DollarSign, LogOut, Shield } from 'lucide-react';
+import { AlertTriangle, LayoutDashboard, FolderKanban, Bell, DollarSign, LogOut, Shield } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -12,8 +14,12 @@ const navItems = [
 ];
 
 const PortalLayout: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isBootstrapping, isAuthenticating, profileError, canManagePortal } = useAuth();
   const location = useLocation();
+
+  if (isBootstrapping) {
+    return <FullScreenLoader message="Restoring your session..." />;
+  }
 
   if (!user) return <Navigate to="/login" replace />;
 
@@ -47,7 +53,7 @@ const PortalLayout: React.FC = () => {
                     </Link>
                   );
                 })}
-                {user.role === 'admin' && (
+                {canManagePortal && (
                   <Link
                     to="/admin"
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -65,11 +71,12 @@ const PortalLayout: React.FC = () => {
 
             <div className="flex items-center gap-4">
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium">{user.name}</p>
+                <p className="text-sm font-medium">{user.full_name}</p>
                 <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
               </div>
               <button
                 onClick={logout}
+                disabled={isAuthenticating}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
@@ -97,7 +104,7 @@ const PortalLayout: React.FC = () => {
                 </Link>
               );
             })}
-            {user.role === 'admin' && (
+            {canManagePortal && (
               <Link
                 to="/admin"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
@@ -114,6 +121,15 @@ const PortalLayout: React.FC = () => {
 
       {/* Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {profileError && (
+          <Alert className="mb-6 border-warning/40 bg-warning/5 text-warning-foreground">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <AlertTitle>Profile fallback active</AlertTitle>
+            <AlertDescription>
+              Profile details could not be fully loaded. The portal is using safe read-only access until the profile query succeeds.
+            </AlertDescription>
+          </Alert>
+        )}
         <Outlet />
       </main>
     </div>

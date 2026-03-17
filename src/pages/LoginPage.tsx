@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import dmitLogo from '@/assets/dmit-logo.png';
 
 const LoginPage: React.FC = () => {
-  const { login, isLoading } = useAuth();
+  const { login, isAuthenticating, user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const success = await login(email, password);
-    if (success) {
+
+    const errorMessage = await login(email, password);
+    if (!errorMessage) {
       navigate('/dashboard');
     } else {
-      setError('Invalid credentials. Try admin@dmit-solutions.com or client@nexacore.com');
+      setError(errorMessage);
     }
   };
 
@@ -50,6 +55,7 @@ const LoginPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                autoComplete="email"
                 className="w-full rounded-lg border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
                 placeholder="you@company.com"
                 required
@@ -61,6 +67,7 @@ const LoginPage: React.FC = () => {
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password"
                 className="w-full rounded-lg border border-border bg-muted/50 px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
                 placeholder="••••••••"
                 required
@@ -73,22 +80,12 @@ const LoginPage: React.FC = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isAuthenticating}
               className="btn-primary-glow w-full text-center disabled:opacity-50"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isAuthenticating ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-
-          {/* Demo credentials */}
-          <div className="mt-6 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground text-center mb-3">Demo credentials (any password)</p>
-            <div className="space-y-1.5 text-xs text-muted-foreground">
-              <p><span className="text-primary">Admin:</span> admin@dmit-solutions.com</p>
-              <p><span className="text-primary">Client:</span> client@nexacore.com</p>
-              <p><span className="text-primary">Client:</span> client@vaultedge.com</p>
-            </div>
-          </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground/50 mt-6">

@@ -1,99 +1,119 @@
 export type UserRole = 'admin' | 'client';
 
-export interface User {
+export interface PortalUser {
   id: string;
   email: string;
-  name: string;
+  full_name: string;
   role: UserRole;
-  companyId?: string;
-  avatar?: string;
+  client_id: string | null;
+  client_company_name: string | null;
 }
 
-export interface Company {
+export interface Client {
   id: string;
-  name: string;
-  contactName: string;
-  contactEmail: string;
-  industry: string;
-  createdAt: string;
+  company_name: string;
+  primary_contact_name: string | null;
+  primary_contact_email: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Profile {
+  id: string;
+  full_name: string | null;
+  email: string | null;
+  role: UserRole;
+  client_id: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Project {
   id: string;
-  companyId: string;
+  client_id: string;
   title: string;
-  description: string;
-  status: 'planning' | 'in-progress' | 'on-hold' | 'completed' | 'blocked';
-  startDate: string;
-  endDate: string;
-  progress: number;
-  health: 'healthy' | 'at-risk' | 'critical';
+  slug: string | null;
+  status: string;
+  summary: string | null;
+  start_date: string | null;
+  target_end_date: string | null;
+  actual_end_date: string | null;
+  total_budget: number;
+  spent_budget: number;
+  currency: string;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface Milestone {
+export interface ProjectMilestone {
   id: string;
-  projectId: string;
+  project_id: string;
   title: string;
-  description: string;
-  dueDate: string;
-  status: 'planned' | 'in-progress' | 'completed' | 'blocked';
-  order: number;
+  description: string | null;
+  milestone_date: string | null;
+  status: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface ScopeItem {
+export interface ProjectScopeItem {
   id: string;
-  projectId: string;
-  category: string;
+  project_id: string;
   title: string;
-  description: string;
+  description: string | null;
+  category: string | null;
   included: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface Goal {
+export interface ProjectGoal {
   id: string;
-  projectId: string;
+  project_id: string;
   title: string;
-  description: string;
-  type: 'strategic' | 'measurable';
-  metric?: string;
-  target?: string;
+  description: string | null;
+  target_metric: string | null;
+  status: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface ChangeRequest {
   id: string;
-  projectId: string;
+  project_id: string;
   title: string;
-  description: string;
-  status: 'pending' | 'approved' | 'rejected';
-  impact: 'low' | 'medium' | 'high';
-  submittedDate: string;
-  resolvedDate?: string;
-  budgetImpact?: number;
-  timelineImpact?: string;
+  description: string | null;
+  status: string;
+  impact_summary: string | null;
+  budget_impact: number;
+  timeline_impact_days: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface BudgetRecord {
+export interface ProjectBudgetItem {
   id: string;
-  projectId: string;
-  totalBudget: number;
-  spent: number;
-  remaining: number;
-  stages: BudgetStage[];
-}
-
-export interface BudgetStage {
-  id: string;
-  name: string;
+  project_id: string;
+  label: string;
   amount: number;
-  status: 'paid' | 'invoiced' | 'upcoming';
+  category: string | null;
+  status: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface CommunicationUpdate {
+export interface ProjectUpdate {
   id: string;
-  projectId: string;
+  project_id: string;
   title: string;
-  content: string;
-  author: string;
-  date: string;
-  type: 'update' | 'milestone' | 'meeting' | 'decision';
+  body: string;
+  update_type: string;
+  visible_to_client: boolean;
+  created_at: string;
+  updated_at: string;
 }
