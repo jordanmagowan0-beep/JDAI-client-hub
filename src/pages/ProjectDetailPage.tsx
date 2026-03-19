@@ -27,7 +27,8 @@ import {
   ProjectBasicsDialog,
   ProjectUpdateDialog,
   ScopeItemDialog,
-} from '@/components/project/ProjectAdminDialogs';
+} from '@/components/admin/ManageEntityDialogs';
+import { DeliverablesList } from '@/components/project/DeliverablesList';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   useChangeRequests,
@@ -617,6 +618,10 @@ const ProjectDetailPage: React.FC = () => {
             />
           )}
         </div>
+      </div>
+
+      <div className="glass-panel p-6">
+        <DeliverablesList projectId={project.id} />
       </div>
 
       <div className="glass-panel p-6">

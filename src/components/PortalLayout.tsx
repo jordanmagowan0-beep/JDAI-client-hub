@@ -4,14 +4,16 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FullScreenLoader } from '@/components/PortalFeedback';
 import { PortalWalkthrough } from '@/components/PortalWalkthrough';
+import { NotificationsDropdown } from '@/components/NotificationsDropdown';
 import dmitLogo from '@/assets/dmit-logo.png';
-import { AlertTriangle, LayoutDashboard, FolderKanban, Bell, DollarSign, LogOut, Shield } from 'lucide-react';
+import { AlertTriangle, LayoutDashboard, FolderKanban, Bell, DollarSign, LogOut, Shield, Settings } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Projects', path: '/projects', icon: FolderKanban },
   { label: 'Updates', path: '/updates', icon: Bell },
   { label: 'Budget', path: '/budget', icon: DollarSign },
+  { label: 'Settings', path: '/settings', icon: Settings },
 ];
 
 const PortalLayout: React.FC = () => {
@@ -75,6 +77,7 @@ const PortalLayout: React.FC = () => {
                 <p className="text-sm font-medium">{user.full_name}</p>
                 <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
               </div>
+              <NotificationsDropdown />
               <PortalWalkthrough />
               <button
                 onClick={logout}

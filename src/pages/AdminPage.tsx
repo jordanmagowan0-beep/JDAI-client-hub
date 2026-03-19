@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { Building2, FolderKanban, LoaderCircle, MessageSquare, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PanelMessage } from '@/components/PortalFeedback';
-import { ClientCreateDialog, ProjectCreateDialog } from '@/components/admin/AdminDialogs';
+import { ClientCreateDialog, ProjectCreateDialog } from '@/components/admin/CreateEntityDialogs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useChangeRequests, useClients, useMilestones, useProjectUpdates, useProjects } from '@/hooks/useData';
 import { usePortalAdmin } from '@/hooks/usePortalAdmin';

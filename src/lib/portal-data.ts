@@ -259,8 +259,21 @@ export const fetchClients = async () => {
   return asRows(data).map(mapClient);
 };
 
-export const fetchProjects = async () => {
-  const { data, error } = await supabase.from('projects').select(PROJECT_SELECT).order('created_at', { ascending: false });
+export interface FetchProjectsOptions {
+  limit?: number;
+  offset?: number;
+}
+
+export const fetchProjects = async (options?: FetchProjectsOptions) => {
+  let query = supabase.from('projects').select(PROJECT_SELECT).order('created_at', { ascending: false });
+
+  if (options?.limit !== undefined) {
+    const from = options.offset || 0;
+    const to = from + options.limit - 1;
+    query = query.range(from, to);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     throw error;
