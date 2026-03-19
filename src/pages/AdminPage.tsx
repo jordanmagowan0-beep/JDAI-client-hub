@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { Building2, FolderKanban, LoaderCircle, MessageSquare } from 'lucide-react';
+import { Building2, FolderKanban, LoaderCircle, MessageSquare, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { PanelMessage } from '@/components/PortalFeedback';
+import { ClientCreateDialog, ProjectCreateDialog } from '@/components/admin/AdminDialogs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useChangeRequests, useClients, useMilestones, useProjectUpdates, useProjects } from '@/hooks/useData';
+import { usePortalAdmin } from '@/hooks/usePortalAdmin';
 import { formatDateLabel } from '@/lib/format';
 import { getProjectProgress } from '@/lib/portal-metrics';
 
@@ -27,17 +30,21 @@ const communicationTypeColors: Record<string, string> = {
 const AdminPage: React.FC = () => {
   const { user, canManagePortal } = useAuth();
   const [activeTab, setActiveTab] = useState<AdminTab>('clients');
+  const [isClientDialogOpen, setIsClientDialogOpen] = useState(false);
+  const [isProjectDialogOpen, setIsProjectDialogOpen] = useState(false);
+  const [projectDialogClientId, setProjectDialogClientId] = useState<string | null>(null);
 
-  if (!user || !canManagePortal) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
+  const admin = usePortalAdmin();
   const clientsQuery = useClients();
   const projectsQuery = useProjects();
   const projectIds = (projectsQuery.data ?? []).map((project) => project.id);
   const milestonesQuery = useMilestones(projectIds);
   const updatesQuery = useProjectUpdates(projectIds);
   const changeRequestsQuery = useChangeRequests(projectIds);
+
+  if (!user || !canManagePortal) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   if (
     clientsQuery.isLoading ||
@@ -84,6 +91,11 @@ const AdminPage: React.FC = () => {
     { id: 'communications' as const, label: 'Communications', icon: MessageSquare },
   ];
 
+  const openProjectDialog = (clientId?: string | null) => {
+    setProjectDialogClientId(clientId || clients[0]?.id || null);
+    setIsProjectDialogOpen(true);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -109,7 +121,14 @@ const AdminPage: React.FC = () => {
 
       {activeTab === 'clients' && (
         <div className="space-y-4">
-          <h2 className="font-display text-lg font-semibold">Clients</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-semibold">Clients</h2>
+            <Button type="button" onClick={() => setIsClientDialogOpen(true)}>
+              <Plus className="h-4 w-4" />
+              Add Client
+            </Button>
+          </div>
+
           <div className="glass-panel overflow-hidden">
             <table className="w-full text-sm">
               <thead>
@@ -119,6 +138,7 @@ const AdminPage: React.FC = () => {
                   <th className="hidden p-4 text-left font-medium text-muted-foreground md:table-cell">Email</th>
                   <th className="p-4 text-left font-medium text-muted-foreground">Status</th>
                   <th className="p-4 text-left font-medium text-muted-foreground">Projects</th>
+                  <th className="p-4 text-right font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -137,6 +157,11 @@ const AdminPage: React.FC = () => {
                       <td className="p-4">
                         <span className="status-badge bg-primary/20 text-primary">{projectCount}</span>
                       </td>
+                      <td className="p-4 text-right">
+                        <Button type="button" variant="outline" size="sm" onClick={() => openProjectDialog(client.id)}>
+                          Add Project
+                        </Button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -147,7 +172,7 @@ const AdminPage: React.FC = () => {
           {clients.length === 0 && (
             <PanelMessage
               title="No clients available"
-              description="Client records from the `clients` table will appear here when they are accessible to the admin account."
+              description="Add the first client to start creating portal projects from the frontend."
             />
           )}
         </div>
@@ -155,7 +180,21 @@ const AdminPage: React.FC = () => {
 
       {activeTab === 'projects' && (
         <div className="space-y-4">
-          <h2 className="font-display text-lg font-semibold">Projects</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-semibold">Projects</h2>
+            <Button type="button" onClick={() => openProjectDialog()} disabled={clients.length === 0}>
+              <Plus className="h-4 w-4" />
+              Add Project
+            </Button>
+          </div>
+
+          {clients.length === 0 && (
+            <PanelMessage
+              title="Create a client first"
+              description="A project requires a real `client_id`, so add a client before creating a project."
+            />
+          )}
+
           <div className="glass-panel overflow-hidden">
             <table className="w-full text-sm">
               <thead>
@@ -208,7 +247,7 @@ const AdminPage: React.FC = () => {
           {projects.length === 0 && (
             <PanelMessage
               title="No projects available"
-              description="Projects from the `projects` table will appear here when they are accessible to the admin account."
+              description="Projects created in the admin portal will appear here as soon as they are saved."
             />
           )}
         </div>
@@ -252,6 +291,27 @@ const AdminPage: React.FC = () => {
           )}
         </div>
       )}
+
+      <ClientCreateDialog
+        open={isClientDialogOpen}
+        onOpenChange={setIsClientDialogOpen}
+        isSubmitting={admin.isCreatingClient}
+        onSubmit={admin.createClient}
+      />
+
+      <ProjectCreateDialog
+        open={isProjectDialogOpen}
+        onOpenChange={(open) => {
+          setIsProjectDialogOpen(open);
+          if (!open) {
+            setProjectDialogClientId(null);
+          }
+        }}
+        isSubmitting={admin.isCreatingProject}
+        clients={clients}
+        defaultClientId={projectDialogClientId}
+        onSubmit={admin.createProject}
+      />
     </div>
   );
 };

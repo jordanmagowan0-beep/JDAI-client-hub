@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import type {
   ChangeRequest,
+  Client,
   Project,
   ProjectBudgetItem,
   ProjectGoal,
@@ -89,6 +90,59 @@ export type ProjectUpdatePayload = Partial<
     'client_id' | 'title' | 'slug' | 'status' | 'summary' | 'start_date' | 'target_end_date' | 'actual_end_date' | 'total_budget' | 'spent_budget' | 'currency'
   >
 >;
+
+export type ClientInsertPayload = Pick<Client, 'company_name'> &
+  Partial<Pick<Client, 'primary_contact_name' | 'primary_contact_email' | 'status'>>;
+
+export interface ClientCreateInput {
+  company_name: string;
+  primary_contact_name?: string | null;
+  primary_contact_email?: string | null;
+  status: string;
+}
+
+const buildClientInsertPayload = (input: ClientCreateInput): ClientInsertPayload => ({
+  company_name: trimRequired(input.company_name, 'Company name'),
+  primary_contact_name: trimOptional(input.primary_contact_name),
+  primary_contact_email: trimOptional(input.primary_contact_email),
+  status: trimRequired(input.status, 'Client status'),
+});
+
+export const createClient = async (input: ClientCreateInput) => {
+  await runInsert('clients', buildClientInsertPayload(input));
+};
+
+export interface ProjectCreateInput {
+  client_id: string;
+  title: string;
+  slug?: string | null;
+  status: string;
+  summary?: string | null;
+  start_date?: string | null;
+  target_end_date?: string | null;
+  actual_end_date?: string | null;
+  total_budget: number | string;
+  spent_budget: number | string;
+  currency: string;
+}
+
+const buildProjectInsertPayload = (input: ProjectCreateInput): ProjectInsertPayload => ({
+  client_id: trimRequired(input.client_id, 'Client'),
+  title: trimRequired(input.title, 'Project title'),
+  slug: trimOptional(input.slug),
+  status: trimRequired(input.status, 'Project status'),
+  summary: trimOptional(input.summary),
+  start_date: parseDateOrNull(input.start_date, 'Start date'),
+  target_end_date: parseDateOrNull(input.target_end_date, 'Target end date'),
+  actual_end_date: parseDateOrNull(input.actual_end_date, 'Actual end date'),
+  total_budget: parseNumeric(input.total_budget, 'Total budget'),
+  spent_budget: parseNumeric(input.spent_budget, 'Spent budget'),
+  currency: trimRequired(input.currency, 'Currency'),
+});
+
+export const createProject = async (input: ProjectCreateInput) => {
+  await runInsert('projects', buildProjectInsertPayload(input));
+};
 
 export interface ProjectBasicsInput {
   project_id: string;

@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FullScreenLoader } from '@/components/PortalFeedback';
+import { PortalWalkthrough } from '@/components/PortalWalkthrough';
 import dmitLogo from '@/assets/dmit-logo.png';
 import { AlertTriangle, LayoutDashboard, FolderKanban, Bell, DollarSign, LogOut, Shield } from 'lucide-react';
 
@@ -74,6 +75,7 @@ const PortalLayout: React.FC = () => {
                 <p className="text-sm font-medium">{user.full_name}</p>
                 <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
               </div>
+              <PortalWalkthrough />
               <button
                 onClick={logout}
                 disabled={isAuthenticating}

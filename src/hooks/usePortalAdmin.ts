@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import {
+  createClient,
+  createProject,
   deleteBudgetItem,
   deleteChangeRequest,
   deleteMilestone,
@@ -14,9 +16,11 @@ import {
   saveProjectScopeItem,
   saveProjectUpdate,
   updateProjectBasics,
+  type ClientCreateInput,
   type ChangeRequestInput,
   type ProjectBasicsInput,
   type ProjectBudgetItemInput,
+  type ProjectCreateInput,
   type ProjectGoalInput,
   type ProjectMilestoneInput,
   type ProjectScopeItemInput,
@@ -69,6 +73,18 @@ export const usePortalAdmin = () => {
     mutationFn: (input: ProjectBasicsInput) => updateProjectBasics(input),
     onSuccess: onSuccess('Project saved', 'Project changes were saved to Supabase.'),
     onError: onError('Unable to save project'),
+  });
+
+  const createClientMutation = useMutation({
+    mutationFn: (input: ClientCreateInput) => createClient(input),
+    onSuccess: onSuccess('Client created', 'The new client was added to Supabase.'),
+    onError: onError('Unable to create client'),
+  });
+
+  const createProjectMutation = useMutation({
+    mutationFn: (input: ProjectCreateInput) => createProject(input),
+    onSuccess: onSuccess('Project created', 'The new project was added to Supabase.'),
+    onError: onError('Unable to create project'),
   });
 
   const saveMilestoneMutation = useMutation({
@@ -144,6 +160,8 @@ export const usePortalAdmin = () => {
   });
 
   return {
+    createClient: createClientMutation.mutateAsync,
+    createProject: createProjectMutation.mutateAsync,
     saveProjectBasics: saveProjectBasicsMutation.mutateAsync,
     saveMilestone: saveMilestoneMutation.mutateAsync,
     deleteMilestone: deleteMilestoneMutation.mutateAsync,
@@ -157,6 +175,8 @@ export const usePortalAdmin = () => {
     deleteChangeRequest: deleteChangeRequestMutation.mutateAsync,
     saveBudgetItem: saveBudgetItemMutation.mutateAsync,
     deleteBudgetItem: deleteBudgetItemMutation.mutateAsync,
+    isCreatingClient: createClientMutation.isPending,
+    isCreatingProject: createProjectMutation.isPending,
     isSavingProjectBasics: saveProjectBasicsMutation.isPending,
     isSavingMilestone: saveMilestoneMutation.isPending,
     isDeletingMilestone: deleteMilestoneMutation.isPending,
