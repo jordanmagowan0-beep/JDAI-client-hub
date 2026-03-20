@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Dialog,
   DialogContent,
@@ -82,57 +83,61 @@ export const ClientCreateDialog: React.FC<ClientCreateDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>Add Client</DialogTitle>
             <DialogDescription>Create a new row in the `clients` table from the admin portal.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Company Name" htmlFor="client-company-name">
-            <Input
-              id="client-company-name"
-              value={company_name}
-              onChange={(event) => setCompanyName(event.target.value)}
-              required
-            />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Company Name" htmlFor="client-company-name">
+                <Input
+                  id="client-company-name"
+                  value={company_name}
+                  onChange={(event) => setCompanyName(event.target.value)}
+                  required
+                />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Primary Contact Name" htmlFor="client-contact-name">
-              <Input
-                id="client-contact-name"
-                value={primary_contact_name}
-                onChange={(event) => setPrimaryContactName(event.target.value)}
-              />
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Primary Contact Name" htmlFor="client-contact-name">
+                  <Input
+                    id="client-contact-name"
+                    value={primary_contact_name}
+                    onChange={(event) => setPrimaryContactName(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Primary Contact Email" htmlFor="client-contact-email">
-              <Input
-                id="client-contact-email"
-                type="email"
-                value={primary_contact_email}
-                onChange={(event) => setPrimaryContactEmail(event.target.value)}
-              />
-            </Field>
+                <Field label="Primary Contact Email" htmlFor="client-contact-email">
+                  <Input
+                    id="client-contact-email"
+                    type="email"
+                    value={primary_contact_email}
+                    onChange={(event) => setPrimaryContactEmail(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select client status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {clientStatusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
-          </div>
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select client status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clientStatusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </div>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -212,126 +217,130 @@ export const ProjectCreateDialog: React.FC<ProjectCreateDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="sm:max-w-2xl max-h-[95vh] flex flex-col p-0 sm:p-6">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>Add Project</DialogTitle>
             <DialogDescription>Create a new row in the `projects` table and attach it to a real client.</DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Client">
-              <Select value={client_id} onValueChange={setClientId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select client" />
-                </SelectTrigger>
-                <SelectContent>
-                  {clients.map((client) => (
-                    <SelectItem key={client.id} value={client.id}>
-                      {client.company_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Client">
+                  <Select value={client_id} onValueChange={setClientId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select client" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {clients.map((client) => (
+                        <SelectItem key={client.id} value={client.id}>
+                          {client.company_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Title" htmlFor="project-create-title">
-              <Input
-                id="project-create-title"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                required
-              />
-            </Field>
+                <Field label="Title" htmlFor="project-create-title">
+                  <Input
+                    id="project-create-title"
+                    value={title}
+                    onChange={(event) => setTitle(event.target.value)}
+                    required
+                  />
+                </Field>
 
-            <Field label="Slug" htmlFor="project-create-slug">
-              <Input id="project-create-slug" value={slug} onChange={(event) => setSlug(event.target.value)} />
-            </Field>
+                <Field label="Slug" htmlFor="project-create-slug">
+                  <Input id="project-create-slug" value={slug} onChange={(event) => setSlug(event.target.value)} />
+                </Field>
 
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select project status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {projectStatusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select project status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {projectStatusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Currency" htmlFor="project-create-currency">
-              <Input
-                id="project-create-currency"
-                value={currency}
-                onChange={(event) => setCurrency(event.target.value.toUpperCase())}
-                required
-              />
-            </Field>
+                <Field label="Currency" htmlFor="project-create-currency">
+                  <Input
+                    id="project-create-currency"
+                    value={currency}
+                    onChange={(event) => setCurrency(event.target.value.toUpperCase())}
+                    required
+                  />
+                </Field>
 
-            <Field label="Start Date" htmlFor="project-create-start-date">
-              <Input
-                id="project-create-start-date"
-                type="date"
-                value={start_date}
-                onChange={(event) => setStartDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Start Date" htmlFor="project-create-start-date">
+                  <Input
+                    id="project-create-start-date"
+                    type="date"
+                    value={start_date}
+                    onChange={(event) => setStartDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Target End Date" htmlFor="project-create-target-end-date">
-              <Input
-                id="project-create-target-end-date"
-                type="date"
-                value={target_end_date}
-                onChange={(event) => setTargetEndDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Target End Date" htmlFor="project-create-target-end-date">
+                  <Input
+                    id="project-create-target-end-date"
+                    type="date"
+                    value={target_end_date}
+                    onChange={(event) => setTargetEndDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Actual End Date" htmlFor="project-create-actual-end-date">
-              <Input
-                id="project-create-actual-end-date"
-                type="date"
-                value={actual_end_date}
-                onChange={(event) => setActualEndDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Actual End Date" htmlFor="project-create-actual-end-date">
+                  <Input
+                    id="project-create-actual-end-date"
+                    type="date"
+                    value={actual_end_date}
+                    onChange={(event) => setActualEndDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Total Budget" htmlFor="project-create-total-budget">
-              <Input
-                id="project-create-total-budget"
-                type="number"
-                step="0.01"
-                value={total_budget}
-                onChange={(event) => setTotalBudget(event.target.value)}
-                required
-              />
-            </Field>
+                <Field label="Total Budget" htmlFor="project-create-total-budget">
+                  <Input
+                    id="project-create-total-budget"
+                    type="number"
+                    step="0.01"
+                    value={total_budget}
+                    onChange={(event) => setTotalBudget(event.target.value)}
+                    required
+                  />
+                </Field>
 
-            <Field label="Spent Budget" htmlFor="project-create-spent-budget">
-              <Input
-                id="project-create-spent-budget"
-                type="number"
-                step="0.01"
-                value={spent_budget}
-                onChange={(event) => setSpentBudget(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Spent Budget" htmlFor="project-create-spent-budget">
+                  <Input
+                    id="project-create-spent-budget"
+                    type="number"
+                    step="0.01"
+                    value={spent_budget}
+                    onChange={(event) => setSpentBudget(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
 
-          <Field label="Summary" htmlFor="project-create-summary">
-            <Textarea
-              id="project-create-summary"
-              rows={5}
-              value={summary}
-              onChange={(event) => setSummary(event.target.value)}
-            />
-          </Field>
+              <Field label="Summary" htmlFor="project-create-summary">
+                <Textarea
+                  id="project-create-summary"
+                  rows={4}
+                  value={summary}
+                  onChange={(event) => setSummary(event.target.value)}
+                />
+              </Field>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>

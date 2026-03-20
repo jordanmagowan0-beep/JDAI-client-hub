@@ -41,6 +41,7 @@ import {
   useProjectUpdates,
 } from '@/hooks/useData';
 import { usePortalAdmin } from '@/hooks/usePortalAdmin';
+import { cn } from '@/lib/utils';
 import { formatCurrency, formatDateLabel } from '@/lib/format';
 import { getProjectBudgetRemaining, getProjectBudgetUtilisation, getProjectProgress } from '@/lib/portal-metrics';
 import type {
@@ -258,45 +259,50 @@ const ProjectDetailPage: React.FC = () => {
         {milestones.length > 0 ? (
           <div className="space-y-4">
             {milestones.map((milestone) => (
-              <div key={milestone.id} className="flex gap-4 rounded-xl border border-border/50 bg-background/30 p-4">
+              <div key={milestone.id} className="flex gap-3 sm:gap-4 rounded-xl border border-border/50 bg-background/30 p-4">
                 <div className="mt-0.5 shrink-0">{renderMilestoneIcon(milestone.status)}</div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="text-sm font-medium">{milestone.title}</h3>
-                        <span className="text-xs text-muted-foreground">{milestone.status}</span>
+                        <span className={cn(
+                          "status-badge scale-90 origin-left",
+                          projectStatusColors[milestone.status] || 'bg-muted text-muted-foreground'
+                        )}>
+                          {milestone.status}
+                        </span>
                       </div>
                       {milestone.description && (
-                        <p className="mt-1 text-xs text-muted-foreground">{milestone.description}</p>
+                        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{milestone.description}</p>
                       )}
                       {formatDateLabel(milestone.milestone_date) && (
-                        <p className="mt-2 text-xs text-muted-foreground">
+                        <p className="mt-2 text-[10px] sm:text-xs text-muted-foreground font-medium">
                           {formatDateLabel(milestone.milestone_date)}
                         </p>
                       )}
                     </div>
 
                     {canManagePortal && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 self-end sm:self-auto">
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => setMilestoneDialog(milestone)}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => handleDelete('milestone', () => admin.deleteMilestone(milestone.id))}
                           disabled={admin.isDeletingMilestone}
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
                     )}
@@ -343,37 +349,40 @@ const ProjectDetailPage: React.FC = () => {
                       .filter((item) => (item.category || 'Uncategorized') === category)
                       .map((item) => (
                         <div key={item.id} className="rounded-xl border border-border/50 bg-background/30 p-4">
-                          <div className="flex items-start justify-between gap-3">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                             <div className="min-w-0 text-sm">
-                              <p className={`font-medium ${item.included ? '' : 'text-muted-foreground line-through'}`}>
+                              <p className={cn(
+                                "font-medium",
+                                !item.included && "text-muted-foreground line-through"
+                              )}>
                                 {item.title}
                               </p>
-                              {item.description && <p className="mt-1 text-xs text-muted-foreground">{item.description}</p>}
-                              <p className="mt-2 text-xs text-muted-foreground">
+                              {item.description && <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.description}</p>}
+                              <p className="mt-2 text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                                 {item.included ? 'Included' : 'Excluded'} · Sort order {item.sort_order}
                               </p>
                             </div>
 
                             {canManagePortal && (
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1 self-end sm:self-auto">
                                 <Button
                                   type="button"
                                   variant="ghost"
                                   size="icon"
-                                  className={iconButtonClassName}
+                                  className={cn(iconButtonClassName, "h-7 w-7")}
                                   onClick={() => setScopeItemDialog(item)}
                                 >
-                                  <Pencil className="h-4 w-4" />
+                                  <Pencil className="h-3.5 w-3.5" />
                                 </Button>
                                 <Button
                                   type="button"
                                   variant="ghost"
                                   size="icon"
-                                  className={iconButtonClassName}
+                                  className={cn(iconButtonClassName, "h-7 w-7")}
                                   onClick={() => handleDelete('scope item', () => admin.deleteScopeItem(item.id))}
                                   disabled={admin.isDeletingScopeItem}
                                 >
-                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                  <Trash2 className="h-3.5 w-3.5 text-destructive" />
                                 </Button>
                               </div>
                             )}
@@ -411,38 +420,45 @@ const ProjectDetailPage: React.FC = () => {
             <div className="space-y-3">
               {goals.map((goal) => (
                 <div key={goal.id} className="rounded-xl border border-border/50 bg-background/30 p-4">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="text-sm font-medium">{goal.title}</h3>
-                        <span className="text-xs text-muted-foreground">{goal.status}</span>
+                        <span className={cn(
+                          "status-badge scale-90 origin-left opacity-70",
+                          goal.status === 'completed' ? 'bg-success/20 text-success' : 'bg-muted text-muted-foreground'
+                        )}>
+                          {goal.status}
+                        </span>
                       </div>
-                      {goal.description && <p className="mt-1 text-xs text-muted-foreground">{goal.description}</p>}
+                      {goal.description && <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{goal.description}</p>}
                       {goal.target_metric && (
-                        <p className="mt-2 text-xs text-primary">Target metric: {goal.target_metric}</p>
+                        <p className="mt-2 text-[10px] sm:text-xs text-primary font-medium uppercase tracking-wider">
+                          Target: {goal.target_metric}
+                        </p>
                       )}
                     </div>
 
                     {canManagePortal && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 self-end sm:self-auto">
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => setGoalDialog(goal)}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => handleDelete('goal', () => admin.deleteGoal(goal.id))}
                           disabled={admin.isDeletingGoal}
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
                     )}
@@ -479,23 +495,26 @@ const ProjectDetailPage: React.FC = () => {
             <div className="space-y-3">
               {changeRequests.map((changeRequest) => (
                 <div key={changeRequest.id} className="rounded-xl border border-border/50 bg-background/30 p-4">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="text-sm font-medium">{changeRequest.title}</h3>
                         <span
-                          className={`status-badge ${changeStatusColors[changeRequest.status] || 'bg-muted text-muted-foreground'}`}
+                          className={cn(
+                            "status-badge scale-90 origin-left",
+                            changeStatusColors[changeRequest.status] || 'bg-muted text-muted-foreground'
+                          )}
                         >
                           {changeRequest.status}
                         </span>
                       </div>
                       {changeRequest.description && (
-                        <p className="mt-1 text-xs text-muted-foreground">{changeRequest.description}</p>
+                        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{changeRequest.description}</p>
                       )}
                       {changeRequest.impact_summary && (
-                        <p className="mt-2 text-xs text-muted-foreground">{changeRequest.impact_summary}</p>
+                        <p className="mt-2 text-xs text-muted-foreground italic border-l border-primary/20 pl-2">{changeRequest.impact_summary}</p>
                       )}
-                      <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+                      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[10px] sm:text-xs text-muted-foreground font-medium uppercase tracking-wider">
                         <span>Budget: {formatCurrency(changeRequest.budget_impact, project.currency)}</span>
                         <span>Timeline: {changeRequest.timeline_impact_days} days</span>
                         <span>Created: {formatDateLabel(changeRequest.created_at) || 'Unknown'}</span>
@@ -503,25 +522,25 @@ const ProjectDetailPage: React.FC = () => {
                     </div>
 
                     {canManagePortal && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 self-end sm:self-auto">
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => setChangeRequestDialog(changeRequest)}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className={iconButtonClassName}
+                          className={cn(iconButtonClassName, "h-7 w-7")}
                           onClick={() => handleDelete('change request', () => admin.deleteChangeRequest(changeRequest.id))}
                           disabled={admin.isDeletingChangeRequest}
                         >
-                          <Trash2 className="h-4 w-4 text-destructive" />
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
                     )}
@@ -560,12 +579,15 @@ const ProjectDetailPage: React.FC = () => {
             <div className="space-y-3">
               {budgetItems.map((budgetItem) => (
                 <div key={budgetItem.id} className="rounded-xl border border-border/50 bg-background/30 p-4">
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="text-sm font-medium">{budgetItem.label}</h3>
                         <span
-                          className={`status-badge ${budgetStatusColors[budgetItem.status] || 'bg-muted text-muted-foreground'}`}
+                          className={cn(
+                            "status-badge scale-90 origin-left",
+                            budgetStatusColors[budgetItem.status] || 'bg-muted text-muted-foreground'
+                          )}
                         >
                           {budgetItem.status}
                         </span>
@@ -574,30 +596,30 @@ const ProjectDetailPage: React.FC = () => {
                         {budgetItem.category || 'Uncategorised'} · Sort order {budgetItem.sort_order}
                       </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 self-stretch sm:self-auto">
+                      <span className="text-sm font-semibold text-primary">
                         {formatCurrency(budgetItem.amount, project.currency)}
                       </span>
                       {canManagePortal && (
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1">
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className={iconButtonClassName}
+                            className={cn(iconButtonClassName, "h-7 w-7")}
                             onClick={() => setBudgetItemDialog(budgetItem)}
                           >
-                            <Pencil className="h-4 w-4" />
+                            <Pencil className="h-3.5 w-3.5" />
                           </Button>
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className={iconButtonClassName}
+                            className={cn(iconButtonClassName, "h-7 w-7")}
                             onClick={() => handleDelete('budget item', () => admin.deleteBudgetItem(budgetItem.id))}
                             disabled={admin.isDeletingBudgetItem}
                           >
-                            <Trash2 className="h-4 w-4 text-destructive" />
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </div>
                       )}

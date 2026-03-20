@@ -36,7 +36,7 @@ export const NotificationsDropdown: React.FC = () => {
           )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[340px] p-0 border-border/50 shadow-xl bg-background/95 backdrop-blur-xl">
+      <DropdownMenuContent align="end" className="w-[calc(100vw-32px)] sm:w-[340px] p-0 border-border/50 shadow-xl bg-background/95 backdrop-blur-xl">
         <DropdownMenuLabel className="p-4 bg-muted/20 border-b border-border/50">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-foreground">Recent Updates</span>

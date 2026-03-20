@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { PanelMessage } from '@/components/PortalFeedback';
 import { useAuth } from '@/contexts/AuthContext';
+import { cn } from '@/lib/utils';
 import { useChangeRequests, useClients, useMilestones, useProjectUpdates, useProjects } from '@/hooks/useData';
 import { formatCurrency, formatDateLabel } from '@/lib/format';
 import { getProjectProgress } from '@/lib/portal-metrics';
@@ -80,11 +81,11 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="font-display text-3xl font-bold">
+      <div className="overflow-hidden">
+        <h1 className="font-display text-2xl font-bold sm:text-3xl">
           Welcome back, <span className="text-gradient">{user?.full_name?.split(' ')[0]}</span>
         </h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           {companyName ? `${companyName} - Portal Overview` : 'Portal Overview'}
         </p>
       </div>
@@ -149,20 +150,23 @@ const DashboardPage: React.FC = () => {
 
               return (
                 <Link key={project.id} to={`/projects/${project.id}`} className="glass-panel-hover block p-4">
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-sm font-medium">{project.title}</h3>
+                  <div className="mb-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-medium truncate sm:whitespace-normal">{project.title}</h3>
                       {canManagePortal && clientNameForProject && (
-                        <p className="mt-0.5 text-xs text-muted-foreground">{clientNameForProject}</p>
+                        <p className="mt-0.5 text-xs text-muted-foreground truncate">{clientNameForProject}</p>
                       )}
                     </div>
-                    <span className={`status-badge ${statusColors[project.status] || 'bg-muted text-muted-foreground'}`}>
+                    <span className={cn(
+                      "status-badge self-start sm:self-auto",
+                      statusColors[project.status] || 'bg-muted text-muted-foreground'
+                    )}>
                       {project.status}
                     </span>
                   </div>
 
                   {(project.start_date || project.target_end_date) && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
                       <Calendar className="h-3 w-3" />
                       {[formatDateLabel(project.start_date), formatDateLabel(project.target_end_date)].filter(Boolean).join(' -> ')}
                     </div>

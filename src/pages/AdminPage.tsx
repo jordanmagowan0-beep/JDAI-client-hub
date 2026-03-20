@@ -103,20 +103,22 @@ const AdminPage: React.FC = () => {
         <p className="mt-1 text-sm text-muted-foreground">Overview of accessible clients, projects, and communications</p>
       </div>
 
-      <div className="flex w-fit gap-1 rounded-lg bg-muted/30 p-1">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <tab.icon className="h-4 w-4" />
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex w-full overflow-x-auto pb-1 sm:w-fit sm:overflow-visible sm:pb-0">
+        <div className="flex gap-1 rounded-lg bg-muted/30 p-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex shrink-0 items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === tab.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <tab.icon className="h-4 w-4" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {activeTab === 'clients' && (
@@ -125,17 +127,17 @@ const AdminPage: React.FC = () => {
             <h2 className="font-display text-lg font-semibold">Clients</h2>
             <Button type="button" onClick={() => setIsClientDialogOpen(true)}>
               <Plus className="h-4 w-4" />
-              Add Client
+              <span className="hidden sm:inline">Add Client</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
 
-          <div className="glass-panel overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="glass-panel overflow-x-auto">
+            <table className="w-full min-w-[600px] text-sm">
               <thead>
                 <tr className="border-b border-border/50">
                   <th className="p-4 text-left font-medium text-muted-foreground">Company</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground sm:table-cell">Primary Contact</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground md:table-cell">Email</th>
+                  <th className="p-4 text-left font-medium text-muted-foreground">Contact</th>
                   <th className="p-4 text-left font-medium text-muted-foreground">Status</th>
                   <th className="p-4 text-left font-medium text-muted-foreground">Projects</th>
                   <th className="p-4 text-right font-medium text-muted-foreground">Actions</th>
@@ -147,13 +149,15 @@ const AdminPage: React.FC = () => {
                   return (
                     <tr key={client.id} className="border-b border-border/30 hover:bg-muted/20">
                       <td className="p-4 font-medium">{client.company_name}</td>
-                      <td className="hidden p-4 text-muted-foreground sm:table-cell">
-                        {client.primary_contact_name || 'Not set'}
+                      <td className="p-4 text-muted-foreground">
+                        <div className="flex flex-col">
+                          <span>{client.primary_contact_name || 'Not set'}</span>
+                          <span className="text-xs opacity-70">{client.primary_contact_email}</span>
+                        </div>
                       </td>
-                      <td className="hidden p-4 text-muted-foreground md:table-cell">
-                        {client.primary_contact_email || 'Not set'}
+                      <td className="p-4">
+                        <span className="status-badge bg-muted text-muted-foreground">{client.status}</span>
                       </td>
-                      <td className="p-4 text-muted-foreground">{client.status}</td>
                       <td className="p-4">
                         <span className="status-badge bg-primary/20 text-primary">{projectCount}</span>
                       </td>
@@ -184,7 +188,8 @@ const AdminPage: React.FC = () => {
             <h2 className="font-display text-lg font-semibold">Projects</h2>
             <Button type="button" onClick={() => openProjectDialog()} disabled={clients.length === 0}>
               <Plus className="h-4 w-4" />
-              Add Project
+              <span className="hidden sm:inline">Add Project</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </div>
 
@@ -195,16 +200,16 @@ const AdminPage: React.FC = () => {
             />
           )}
 
-          <div className="glass-panel overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="glass-panel overflow-x-auto">
+            <table className="w-full min-w-[700px] text-sm">
               <thead>
                 <tr className="border-b border-border/50">
                   <th className="p-4 text-left font-medium text-muted-foreground">Project</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground sm:table-cell">Client</th>
+                  <th className="p-4 text-left font-medium text-muted-foreground">Client</th>
                   <th className="p-4 text-left font-medium text-muted-foreground">Status</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground md:table-cell">Progress</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground lg:table-cell">Milestones</th>
-                  <th className="hidden p-4 text-left font-medium text-muted-foreground lg:table-cell">Changes</th>
+                  <th className="p-4 text-left font-medium text-muted-foreground">Progress</th>
+                  <th className="p-4 text-left font-medium text-muted-foreground">Milestones</th>
+                  <th className="p-4 text-left font-medium text-muted-foreground">Changes</th>
                 </tr>
               </thead>
               <tbody>
@@ -221,13 +226,13 @@ const AdminPage: React.FC = () => {
                           {project.title}
                         </Link>
                       </td>
-                      <td className="hidden p-4 text-muted-foreground sm:table-cell">{client?.company_name || '-'}</td>
+                      <td className="p-4 text-muted-foreground">{client?.company_name || '-'}</td>
                       <td className="p-4">
                         <span className={`status-badge text-xs ${projectStatusColors[project.status] || 'bg-muted text-muted-foreground'}`}>
                           {project.status}
                         </span>
                       </td>
-                      <td className="hidden p-4 md:table-cell">
+                      <td className="p-4">
                         <div className="flex items-center gap-2">
                           <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
                             <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
@@ -235,8 +240,8 @@ const AdminPage: React.FC = () => {
                           <span className="text-xs text-muted-foreground">{progress}%</span>
                         </div>
                       </td>
-                      <td className="hidden p-4 text-muted-foreground lg:table-cell">{milestoneCount}</td>
-                      <td className="hidden p-4 text-muted-foreground lg:table-cell">{changeCount}</td>
+                      <td className="p-4 text-muted-foreground">{milestoneCount}</td>
+                      <td className="p-4 text-muted-foreground">{changeCount}</td>
                     </tr>
                   );
                 })}

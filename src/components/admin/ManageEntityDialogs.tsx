@@ -18,6 +18,7 @@ import {
   type ProjectUpdateInput,
 } from '@/lib/portal-admin';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Dialog,
   DialogContent,
@@ -131,106 +132,110 @@ export const ProjectBasicsDialog: React.FC<ProjectBasicsDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="sm:max-w-2xl max-h-[95vh] flex flex-col p-0 sm:p-6">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>Edit Project</DialogTitle>
             <DialogDescription>Save exact `projects` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Title" htmlFor="project-title">
-              <Input id="project-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-            </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Title" htmlFor="project-title">
+                  <Input id="project-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+                </Field>
 
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select project status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select project status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Slug" htmlFor="project-slug">
-              <Input id="project-slug" value={slug} onChange={(event) => setSlug(event.target.value)} />
-            </Field>
+                <Field label="Slug" htmlFor="project-slug">
+                  <Input id="project-slug" value={slug} onChange={(event) => setSlug(event.target.value)} />
+                </Field>
 
-            <Field label="Currency" htmlFor="project-currency">
-              <Input
-                id="project-currency"
-                value={currency}
-                onChange={(event) => setCurrency(event.target.value.toUpperCase())}
-                required
-              />
-            </Field>
+                <Field label="Currency" htmlFor="project-currency">
+                  <Input
+                    id="project-currency"
+                    value={currency}
+                    onChange={(event) => setCurrency(event.target.value.toUpperCase())}
+                    required
+                  />
+                </Field>
 
-            <Field label="Start Date" htmlFor="project-start-date">
-              <Input
-                id="project-start-date"
-                type="date"
-                value={start_date}
-                onChange={(event) => setStartDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Start Date" htmlFor="project-start-date">
+                  <Input
+                    id="project-start-date"
+                    type="date"
+                    value={start_date}
+                    onChange={(event) => setStartDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Target End Date" htmlFor="project-target-end-date">
-              <Input
-                id="project-target-end-date"
-                type="date"
-                value={target_end_date}
-                onChange={(event) => setTargetEndDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Target End Date" htmlFor="project-target-end-date">
+                  <Input
+                    id="project-target-end-date"
+                    type="date"
+                    value={target_end_date}
+                    onChange={(event) => setTargetEndDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Actual End Date" htmlFor="project-actual-end-date">
-              <Input
-                id="project-actual-end-date"
-                type="date"
-                value={actual_end_date}
-                onChange={(event) => setActualEndDate(event.target.value)}
-              />
-            </Field>
+                <Field label="Actual End Date" htmlFor="project-actual-end-date">
+                  <Input
+                    id="project-actual-end-date"
+                    type="date"
+                    value={actual_end_date}
+                    onChange={(event) => setActualEndDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Total Budget" htmlFor="project-total-budget">
-              <Input
-                id="project-total-budget"
-                type="number"
-                step="0.01"
-                value={total_budget}
-                onChange={(event) => setTotalBudget(event.target.value)}
-                required
-              />
-            </Field>
+                <Field label="Total Budget" htmlFor="project-total-budget">
+                  <Input
+                    id="project-total-budget"
+                    type="number"
+                    step="0.01"
+                    value={total_budget}
+                    onChange={(event) => setTotalBudget(event.target.value)}
+                    required
+                  />
+                </Field>
 
-            <Field label="Spent Budget" htmlFor="project-spent-budget">
-              <Input
-                id="project-spent-budget"
-                type="number"
-                step="0.01"
-                value={spent_budget}
-                onChange={(event) => setSpentBudget(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Spent Budget" htmlFor="project-spent-budget">
+                  <Input
+                    id="project-spent-budget"
+                    type="number"
+                    step="0.01"
+                    value={spent_budget}
+                    onChange={(event) => setSpentBudget(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
 
-          <Field label="Summary" htmlFor="project-summary">
-            <Textarea
-              id="project-summary"
-              rows={5}
-              value={summary}
-              onChange={(event) => setSummary(event.target.value)}
-            />
-          </Field>
+              <Field label="Summary" htmlFor="project-summary">
+                <Textarea
+                  id="project-summary"
+                  rows={4}
+                  value={summary}
+                  onChange={(event) => setSummary(event.target.value)}
+                />
+              </Field>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -296,63 +301,67 @@ export const MilestoneDialog: React.FC<MilestoneDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{milestone ? 'Edit Milestone' : 'Add Milestone'}</DialogTitle>
             <DialogDescription>Save exact `project_milestones` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Title" htmlFor="milestone-title">
-            <Input id="milestone-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Title" htmlFor="milestone-title">
+                <Input id="milestone-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+              </Field>
 
-          <Field label="Description" htmlFor="milestone-description">
-            <Textarea
-              id="milestone-description"
-              rows={4}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </Field>
+              <Field label="Description" htmlFor="milestone-description">
+                <Textarea
+                  id="milestone-description"
+                  rows={4}
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Milestone Date" htmlFor="milestone-date">
-              <Input
-                id="milestone-date"
-                type="date"
-                value={milestone_date}
-                onChange={(event) => setMilestoneDate(event.target.value)}
-              />
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Milestone Date" htmlFor="milestone-date">
+                  <Input
+                    id="milestone-date"
+                    type="date"
+                    value={milestone_date}
+                    onChange={(event) => setMilestoneDate(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select milestone status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select milestone status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Sort Order" htmlFor="milestone-sort-order">
-              <Input
-                id="milestone-sort-order"
-                type="number"
-                value={sort_order}
-                onChange={(event) => setSortOrder(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Sort Order" htmlFor="milestone-sort-order">
+                  <Input
+                    id="milestone-sort-order"
+                    type="number"
+                    value={sort_order}
+                    onChange={(event) => setSortOrder(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -415,51 +424,55 @@ export const ProjectUpdateDialog: React.FC<ProjectUpdateDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{update ? 'Edit Project Update' : 'Add Project Update'}</DialogTitle>
             <DialogDescription>Save exact `project_updates` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Title" htmlFor="project-update-title">
-            <Input id="project-update-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Title" htmlFor="project-update-title">
+                <Input id="project-update-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+              </Field>
 
-          <Field label="Body" htmlFor="project-update-body">
-            <Textarea
-              id="project-update-body"
-              rows={6}
-              value={body}
-              onChange={(event) => setBody(event.target.value)}
-              required
-            />
-          </Field>
+              <Field label="Body" htmlFor="project-update-body">
+                <Textarea
+                  id="project-update-body"
+                  rows={6}
+                  value={body}
+                  onChange={(event) => setBody(event.target.value)}
+                  required
+                />
+              </Field>
 
-          <Field label="Update Type">
-            <Select value={update_type} onValueChange={setUpdateType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select update type" />
-              </SelectTrigger>
-              <SelectContent>
-                {updateTypeOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
+              <Field label="Update Type">
+                <Select value={update_type} onValueChange={setUpdateType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select update type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {updateTypeOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
 
-          <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
-            <div>
-              <p className="text-sm font-medium">Visible to client</p>
-              <p className="text-xs text-muted-foreground">Turn off to keep this update internal-only.</p>
+              <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">Visible to client</p>
+                  <p className="text-xs text-muted-foreground">Turn off to keep this update internal-only.</p>
+                </div>
+                <Switch checked={visible_to_client} onCheckedChange={setVisibleToClient} />
+              </div>
             </div>
-            <Switch checked={visible_to_client} onCheckedChange={setVisibleToClient} />
-          </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -523,51 +536,55 @@ export const ScopeItemDialog: React.FC<ScopeItemDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{scopeItem ? 'Edit Scope Item' : 'Add Scope Item'}</DialogTitle>
             <DialogDescription>Save exact `project_scope_items` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Title" htmlFor="scope-item-title">
-            <Input id="scope-item-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Title" htmlFor="scope-item-title">
+                <Input id="scope-item-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+              </Field>
 
-          <Field label="Description" htmlFor="scope-item-description">
-            <Textarea
-              id="scope-item-description"
-              rows={4}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </Field>
+              <Field label="Description" htmlFor="scope-item-description">
+                <Textarea
+                  id="scope-item-description"
+                  rows={4}
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Category" htmlFor="scope-item-category">
-              <Input id="scope-item-category" value={category} onChange={(event) => setCategory(event.target.value)} />
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Category" htmlFor="scope-item-category">
+                  <Input id="scope-item-category" value={category} onChange={(event) => setCategory(event.target.value)} />
+                </Field>
 
-            <Field label="Sort Order" htmlFor="scope-item-sort-order">
-              <Input
-                id="scope-item-sort-order"
-                type="number"
-                value={sort_order}
-                onChange={(event) => setSortOrder(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Sort Order" htmlFor="scope-item-sort-order">
+                  <Input
+                    id="scope-item-sort-order"
+                    type="number"
+                    value={sort_order}
+                    onChange={(event) => setSortOrder(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
 
-          <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
-            <div>
-              <p className="text-sm font-medium">Included in scope</p>
-              <p className="text-xs text-muted-foreground">Turn off to mark the item as excluded.</p>
+              <div className="flex items-center justify-between rounded-lg border border-border/60 px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">Included in scope</p>
+                  <p className="text-xs text-muted-foreground">Turn off to mark the item as excluded.</p>
+                </div>
+                <Switch checked={included} onCheckedChange={setIncluded} />
+              </div>
             </div>
-            <Switch checked={included} onCheckedChange={setIncluded} />
-          </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -633,62 +650,66 @@ export const GoalDialog: React.FC<GoalDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{goal ? 'Edit Goal' : 'Add Goal'}</DialogTitle>
             <DialogDescription>Save exact `project_goals` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Title" htmlFor="goal-title">
-            <Input id="goal-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Title" htmlFor="goal-title">
+                <Input id="goal-title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+              </Field>
 
-          <Field label="Description" htmlFor="goal-description">
-            <Textarea
-              id="goal-description"
-              rows={4}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </Field>
+              <Field label="Description" htmlFor="goal-description">
+                <Textarea
+                  id="goal-description"
+                  rows={4}
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              </Field>
 
-          <Field label="Target Metric" htmlFor="goal-target-metric">
-            <Input
-              id="goal-target-metric"
-              value={target_metric}
-              onChange={(event) => setTargetMetric(event.target.value)}
-            />
-          </Field>
+              <Field label="Target Metric" htmlFor="goal-target-metric">
+                <Input
+                  id="goal-target-metric"
+                  value={target_metric}
+                  onChange={(event) => setTargetMetric(event.target.value)}
+                />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select goal status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select goal status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Sort Order" htmlFor="goal-sort-order">
-              <Input
-                id="goal-sort-order"
-                type="number"
-                value={sort_order}
-                onChange={(event) => setSortOrder(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Sort Order" htmlFor="goal-sort-order">
+                  <Input
+                    id="goal-sort-order"
+                    type="number"
+                    value={sort_order}
+                    onChange={(event) => setSortOrder(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -757,79 +778,83 @@ export const ChangeRequestDialog: React.FC<ChangeRequestDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{changeRequest ? 'Edit Change Request' : 'Add Change Request'}</DialogTitle>
             <DialogDescription>Save exact `change_requests` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Title" htmlFor="change-request-title">
-            <Input
-              id="change-request-title"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              required
-            />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Title" htmlFor="change-request-title">
+                <Input
+                  id="change-request-title"
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                  required
+                />
+              </Field>
 
-          <Field label="Description" htmlFor="change-request-description">
-            <Textarea
-              id="change-request-description"
-              rows={4}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-            />
-          </Field>
+              <Field label="Description" htmlFor="change-request-description">
+                <Textarea
+                  id="change-request-description"
+                  rows={4}
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              </Field>
 
-          <Field label="Impact Summary" htmlFor="change-request-impact-summary">
-            <Textarea
-              id="change-request-impact-summary"
-              rows={3}
-              value={impact_summary}
-              onChange={(event) => setImpactSummary(event.target.value)}
-            />
-          </Field>
+              <Field label="Impact Summary" htmlFor="change-request-impact-summary">
+                <Textarea
+                  id="change-request-impact-summary"
+                  rows={3}
+                  value={impact_summary}
+                  onChange={(event) => setImpactSummary(event.target.value)}
+                />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select request status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select request status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Budget Impact" htmlFor="change-request-budget-impact">
-              <Input
-                id="change-request-budget-impact"
-                type="number"
-                step="0.01"
-                value={budget_impact}
-                onChange={(event) => setBudgetImpact(event.target.value)}
-                required
-              />
-            </Field>
+                <Field label="Budget Impact" htmlFor="change-request-budget-impact">
+                  <Input
+                    id="change-request-budget-impact"
+                    type="number"
+                    step="0.01"
+                    value={budget_impact}
+                    onChange={(event) => setBudgetImpact(event.target.value)}
+                    required
+                  />
+                </Field>
 
-            <Field label="Timeline Impact Days" htmlFor="change-request-timeline-impact-days">
-              <Input
-                id="change-request-timeline-impact-days"
-                type="number"
-                value={timeline_impact_days}
-                onChange={(event) => setTimelineImpactDays(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Timeline Impact Days" htmlFor="change-request-timeline-impact-days">
+                  <Input
+                    id="change-request-timeline-impact-days"
+                    type="number"
+                    value={timeline_impact_days}
+                    onChange={(event) => setTimelineImpactDays(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -895,64 +920,68 @@ export const BudgetItemDialog: React.FC<BudgetItemDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6 sm:max-w-lg">
+        <form onSubmit={handleSubmit} className="flex flex-col h-full overflow-hidden">
+          <DialogHeader className="p-6 pb-0 sm:p-0">
             <DialogTitle>{budgetItem ? 'Edit Budget Item' : 'Add Budget Item'}</DialogTitle>
             <DialogDescription>Save exact `project_budget_items` columns directly to Supabase.</DialogDescription>
           </DialogHeader>
 
-          <Field label="Label" htmlFor="budget-item-label">
-            <Input id="budget-item-label" value={label} onChange={(event) => setLabel(event.target.value)} required />
-          </Field>
+          <ScrollArea className="flex-1 px-6 py-4 sm:px-0 sm:py-6">
+            <div className="space-y-4 pb-4">
+              <Field label="Label" htmlFor="budget-item-label">
+                <Input id="budget-item-label" value={label} onChange={(event) => setLabel(event.target.value)} required />
+              </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Amount" htmlFor="budget-item-amount">
-              <Input
-                id="budget-item-amount"
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                required
-              />
-            </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Amount" htmlFor="budget-item-amount">
+                  <Input
+                    id="budget-item-amount"
+                    type="number"
+                    step="0.01"
+                    value={amount}
+                    onChange={(event) => setAmount(event.target.value)}
+                    required
+                  />
+                </Field>
 
-            <Field label="Category" htmlFor="budget-item-category">
-              <Input
-                id="budget-item-category"
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-              />
-            </Field>
+                <Field label="Category" htmlFor="budget-item-category">
+                  <Input
+                    id="budget-item-category"
+                    value={category}
+                    onChange={(event) => setCategory(event.target.value)}
+                  />
+                </Field>
 
-            <Field label="Status">
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select budget status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+                <Field label="Status">
+                  <Select value={status} onValueChange={setStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select budget status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-            <Field label="Sort Order" htmlFor="budget-item-sort-order">
-              <Input
-                id="budget-item-sort-order"
-                type="number"
-                value={sort_order}
-                onChange={(event) => setSortOrder(event.target.value)}
-                required
-              />
-            </Field>
-          </div>
+                <Field label="Sort Order" htmlFor="budget-item-sort-order">
+                  <Input
+                    id="budget-item-sort-order"
+                    type="number"
+                    value={sort_order}
+                    onChange={(event) => setSortOrder(event.target.value)}
+                    required
+                  />
+                </Field>
+              </div>
+            </div>
+          </ScrollArea>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 pt-2 border-t sm:p-0 sm:pt-4 sm:border-0">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
               Cancel
             </Button>

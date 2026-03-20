@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useClients, useMilestones, useProjects } from '@/hooks/useData';
 import { formatCurrency, formatDateLabel } from '@/lib/format';
 import { getProjectBudgetRemaining, getProjectProgress } from '@/lib/portal-metrics';
+import { cn } from '@/lib/utils';
 
 const statusColors: Record<string, string> = {
   'in-progress': 'bg-primary/20 text-primary',
@@ -63,52 +64,55 @@ const ProjectsPage: React.FC = () => {
           const remaining = getProjectBudgetRemaining(project);
 
           return (
-            <Link key={project.id} to={`/projects/${project.id}`} className="glass-panel-hover block p-6">
-              <div className="mb-3 flex items-start justify-between gap-3">
+            <Link key={project.id} to={`/projects/${project.id}`} className="glass-panel-hover block p-5 sm:p-6">
+              <div className="mb-3 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                 <div className="min-w-0 flex-1">
-                  <h2 className="font-display text-lg font-semibold">{project.title}</h2>
+                  <h2 className="font-display text-base sm:text-lg font-semibold truncate sm:whitespace-normal">{project.title}</h2>
                   {canManagePortal && client && (
-                    <p className="mt-0.5 text-xs text-muted-foreground">{client.company_name}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground truncate">{client.company_name}</p>
                   )}
                 </div>
-                <span className={`status-badge ${statusColors[project.status] || 'bg-muted text-muted-foreground'}`}>
+                <span className={cn(
+                  "status-badge self-start sm:self-auto",
+                  statusColors[project.status] || 'bg-muted text-muted-foreground'
+                )}>
                   {project.status}
                 </span>
               </div>
 
-              <p className="mb-4 text-sm text-muted-foreground line-clamp-3">
+              <p className="mb-4 text-xs sm:text-sm text-muted-foreground line-clamp-2 sm:line-clamp-3">
                 {project.summary || 'No summary has been added to this project yet.'}
               </p>
 
               {(project.start_date || project.target_end_date) && (
-                <div className="mb-3 flex items-center gap-1 text-xs text-muted-foreground">
-                  <Calendar className="h-3 w-3" />
+                <div className="mb-4 flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5" />
                   {[formatDateLabel(project.start_date), formatDateLabel(project.target_end_date)].filter(Boolean).join(' -> ')}
                 </div>
               )}
 
-              <div className="grid grid-cols-3 gap-3 text-xs text-muted-foreground">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-muted-foreground mb-4">
+                <div className="flex sm:block justify-between items-baseline border-b sm:border-0 border-border/30 pb-1.5 sm:pb-0">
                   <p>Budget</p>
-                  <p className="mt-1 font-medium text-foreground">{formatCurrency(project.total_budget, project.currency)}</p>
+                  <p className="mt-0 sm:mt-1 font-medium text-foreground">{formatCurrency(project.total_budget, project.currency)}</p>
                 </div>
-                <div>
+                <div className="flex sm:block justify-between items-baseline border-b sm:border-0 border-border/30 pb-1.5 sm:pb-0">
                   <p>Spent</p>
-                  <p className="mt-1 font-medium text-foreground">{formatCurrency(project.spent_budget, project.currency)}</p>
+                  <p className="mt-0 sm:mt-1 font-medium text-foreground">{formatCurrency(project.spent_budget, project.currency)}</p>
                 </div>
-                <div>
+                <div className="flex sm:block justify-between items-baseline">
                   <p>Remaining</p>
-                  <p className="mt-1 font-medium text-foreground">{formatCurrency(remaining, project.currency)}</p>
+                  <p className="mt-0 sm:mt-1 font-medium text-foreground">{formatCurrency(remaining, project.currency)}</p>
                 </div>
               </div>
 
-              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-muted">
+              <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                 <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
               </div>
 
-              <div className="mt-2 flex items-center justify-between">
-                <p className="text-xs text-muted-foreground">{progress}% complete</p>
-                <span className="flex items-center gap-1 text-xs text-primary">
+              <div className="mt-3 flex items-center justify-between">
+                <p className="text-[10px] sm:text-xs text-muted-foreground font-medium">{progress}% complete</p>
+                <span className="flex items-center gap-1 text-[10px] sm:text-xs text-primary font-medium">
                   View details <ArrowRight className="h-3 w-3" />
                 </span>
               </div>

@@ -116,28 +116,30 @@ const BudgetPage: React.FC = () => {
             </div>
 
             {projectBudgetItems.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {projectBudgetItems.map((budgetItem) => (
                   <div
                     key={budgetItem.id}
-                    className="flex items-center justify-between border-b border-border/30 py-2 text-sm last:border-b-0"
+                    className="flex flex-col gap-2 border-b border-border/30 pb-3 last:border-b-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-2"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-start gap-3 sm:items-center">
                       <span
-                        className={`status-badge text-xs ${
+                        className={`status-badge mt-1 shrink-0 text-[10px] sm:mt-0 sm:text-xs ${
                           budgetItemStatusColors[budgetItem.status] || 'bg-muted text-muted-foreground'
                         }`}
                       >
                         {budgetItem.status}
                       </span>
-                      <div>
-                        <p>{budgetItem.label}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {budgetItem.category || 'Uncategorised'} · Sort order {budgetItem.sort_order}
+                      <div className="min-w-0 flex-1">
+                        <p className="line-clamp-1 text-sm font-medium">{budgetItem.label}</p>
+                        <p className="text-[11px] text-muted-foreground sm:text-xs">
+                          {budgetItem.category || 'Uncategorised'} · Sort {budgetItem.sort_order}
                         </p>
                       </div>
                     </div>
-                    <span className="font-medium">{formatCurrency(budgetItem.amount, project.currency)}</span>
+                    <span className="self-end text-sm font-semibold sm:self-center">
+                      {formatCurrency(budgetItem.amount, project.currency)}
+                    </span>
                   </div>
                 ))}
               </div>
