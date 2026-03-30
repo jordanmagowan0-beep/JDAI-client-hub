@@ -76,7 +76,7 @@ const DashboardPage: React.FC = () => {
   const budgetUtilisation = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
   const pendingChanges = changeRequests.filter((request) => request.status === 'pending');
   const companyName = canManagePortal
-    ? 'DMIT Solutions'
+    ? 'JDAI Solutions'
     : user?.client_company_name || (user?.client_id ? clientMap.get(user.client_id)?.company_name : null);
 
   return (

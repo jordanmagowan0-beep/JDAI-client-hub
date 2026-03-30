@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
-import dmitLogo from '@/assets/dmit-logo.png';
+import companyLogo from '@/assets/JDAI_Logo.png';
 
 const LoginPage: React.FC = () => {
   const { login, isAuthenticating, user } = useAuth();
@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
         <div className="glass-panel p-8 md:p-10">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <img src={dmitLogo} alt="DMIT Solutions" className="h-12 object-contain" />
+            <img src={companyLogo} alt="JDAI Solutions" className="h-12 object-contain" />
           </div>
 
           {/* Header */}
@@ -89,7 +89,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground/50 mt-6">
-          © 2026 DMIT Solutions. All rights reserved.
+          © 2026 JDAI Solutions. All rights reserved.
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { AlertCircle, LoaderCircle } from 'lucide-react';
-import dmitLogo from '@/assets/dmit-logo.png';
+import companyLogo from '@/assets/JDAI_Logo.png';
 import { cn } from '@/lib/utils';
 
 interface PanelMessageProps {
@@ -19,7 +19,7 @@ export const FullScreenLoader: React.FC<{ message?: string }> = ({
     <div className="glow-blob w-[600px] h-[600px] -top-40 left-1/2 -translate-x-1/2 animate-pulse-glow" />
     <div className="relative z-10 w-full max-w-sm px-6">
       <div className="glass-panel p-8 text-center">
-        <img src={dmitLogo} alt="DMIT Solutions" className="h-10 mx-auto object-contain mb-6" />
+        <img src={companyLogo} alt="JDAI Solutions" className="h-10 mx-auto object-contain mb-6" />
         <LoaderCircle className="w-8 h-8 text-primary mx-auto animate-spin" />
         <p className="text-sm text-muted-foreground mt-4">{message}</p>
       </div>

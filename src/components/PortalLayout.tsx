@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FullScreenLoader } from '@/components/PortalFeedback';
 import { PortalWalkthrough } from '@/components/PortalWalkthrough';
 import { NotificationsDropdown } from '@/components/NotificationsDropdown';
-import dmitLogo from '@/assets/dmit-logo.png';
+import companyLogo from '@/assets/JDAI_Logo.png';
 import {
   AlertTriangle,
   LayoutDashboard,
@@ -109,7 +109,7 @@ const PortalLayout: React.FC = () => {
                   <SheetContent side="left" className="w-[280px] p-0 border-r-border/30 bg-background/95 backdrop-blur-xl">
                     <SheetHeader className="p-6 border-b border-border/50 text-left">
                       <SheetTitle className="flex items-center gap-2">
-                        <img src={dmitLogo} alt="DMIT" className="h-6" />
+                        <img src={companyLogo} alt="JDAI Solutions" className="h-6" />
                         <span className="font-display text-lg font-bold text-gradient">Portal</span>
                       </SheetTitle>
                     </SheetHeader>
@@ -139,7 +139,7 @@ const PortalLayout: React.FC = () => {
               </div>
 
               <Link to="/dashboard" className="flex items-center">
-                <img src={dmitLogo} alt="DMIT Solutions" className="h-7 md:h-8" />
+                <img src={companyLogo} alt="JDAI Solutions" className="h-7 md:h-8" />
               </Link>
 
               <div className="hidden md:flex items-center gap-1">

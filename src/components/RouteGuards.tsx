@@ -17,7 +17,7 @@ export const ProtectedRoute: React.FC = () => {
   const { user, isBootstrapping } = useAuth();
 
   if (isBootstrapping) {
-    return <FullScreenLoader message="Restoring your DMIT portal session..." />;
+    return <FullScreenLoader message="Restoring your JDAI Solutions portal session..." />;
   }
 
   if (!user) {

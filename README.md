@@ -1,6 +1,6 @@
-# DMIT Solutions — Client Portal
+# JDAI Solutions — Client Portal
 
-Secure client portal for DMIT Solutions. Access your project dashboard, milestones, budgets, and updates.
+Secure client portal for JDAI Solutions. Access your project dashboard, milestones, budgets, and updates.
 
 ## Tech Stack
 - React + Vite

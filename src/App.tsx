@@ -27,7 +27,7 @@ const HomeRoute = () => {
   const { user, isBootstrapping } = useAuth();
 
   if (isBootstrapping) {
-    return <FullScreenLoader message="Loading the DMIT client portal..." />;
+    return <FullScreenLoader message="Loading the JDAI Solutions client portal..." />;
   }
 
   return <Navigate to={user ? "/dashboard" : "/login"} replace />;

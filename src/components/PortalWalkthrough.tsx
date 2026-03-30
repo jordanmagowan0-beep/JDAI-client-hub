@@ -26,7 +26,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
 const WALKTHROUGH_VERSION = 'v1';
-const STORAGE_PREFIX = 'dmit-portal-walkthrough';
+const STORAGE_PREFIX = 'JDAI Solutions-portal-walkthrough';
 
 interface WalkthroughStep {
   id: string;
